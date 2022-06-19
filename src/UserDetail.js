@@ -10,7 +10,7 @@ const UserDetail = ({ userId }) => {
   };
 
   const onSuccess = (data) => {
-    console.error("Performed data success: ", data);
+    console.log("Performed data success: ", data);
   };
 
   const {

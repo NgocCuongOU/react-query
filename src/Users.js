@@ -1,48 +1,57 @@
-import { useState } from "react";
-import { useQuery } from "react-query";
-import { getUsers } from "./usersApi";
+import React from "react";
+import { useUsers } from "./hooks/useUser";
 
 function Users({ setUserId }) {
-  const [interval] = useState(1000);
-
   const {
     data: users,
+    isFetchingNextPage,
     isLoading,
-    isError,
     isFetching,
-  } = useQuery("users", getUsers, {
-    retry: false,
-    // Refetch data every second
-    // refetchInterval: interval,
-  });
+    isError,
+    fetchNextPage,
+    hasNextPage,
+  } = useUsers();
 
   if (isLoading) {
     return <h1>Loading users...</h1>;
   }
 
-  // if (isFetching) {
-  //   return <h1>isFetching...</h1>;
-  // }
+  if (isFetching && !isFetchingNextPage) {
+    return <h1>Re-Fetching users...</h1>;
+  }
 
   if (isError) {
     return <h1>Something went wrong... </h1>;
   }
 
   return (
-    <ul>
-      {users &&
-        users.map((user) => (
-          <li style={{ marginBottom: 10 }} key={user.id}>
-            {user.id}: {user.name}
-            <button
-              style={{ marginLeft: 10 }}
-              onClick={() => setUserId(user.id)}
-            >
-              View
-            </button>
-          </li>
-        ))}
-    </ul>
+    <>
+      <ul>
+        {users &&
+          users.pages.map((groups, index) => {
+            return (
+              <React.Fragment key={index}>
+                {groups.data.map((user) => {
+                  return (
+                    <li style={{ marginBottom: 10 }} key={user.id}>
+                      {user.id}: {user.name}
+                      <button
+                        style={{ marginLeft: 10 }}
+                        onClick={() => setUserId(user.id)}
+                      >
+                        View
+                      </button>
+                    </li>
+                  );
+                })}
+              </React.Fragment>
+            );
+          })}
+      </ul>
+      <button disabled={!hasNextPage} onClick={fetchNextPage}>
+        Load more
+      </button>
+    </>
   );
 }
 
