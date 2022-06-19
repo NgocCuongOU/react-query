@@ -39,9 +39,9 @@ const UserForm = ({ user, setIsEditing }) => {
       // console.log("data: ", data);
       queryClient.invalidateQueries(["user", user.id]);
 
-      // queryClient.invalidateQueries("users", {
-      //   exact: true,
-      // });
+      queryClient.invalidateQueries("users", {
+        exact: true,
+      });
       setIsEditing(false);
     },
     // Default unset retry

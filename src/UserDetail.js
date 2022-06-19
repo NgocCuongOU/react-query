@@ -1,19 +1,24 @@
 import React, { useState } from "react";
-import { useQuery } from "react-query";
-import { getUser } from "./usersApi";
+import { useUser } from "./hooks/useUser";
 import UserForm from "./UserForm";
 
 const UserDetail = ({ userId }) => {
   const [isEditing, setIsEditing] = useState(false);
+
+  const onError = (error) => {
+    console.log(error);
+  };
+
+  const onSuccess = (data) => {
+    console.error("Performed data success: ", data);
+  };
 
   const {
     data: user,
     isLoading,
     isError,
     isFetching,
-  } = useQuery(["user", userId], () => getUser(userId), {
-    enabled: Boolean(userId),
-  });
+  } = useUser(userId, onSuccess, onError);
 
   if (!userId) {
     return <h2>Select a user please.</h2>;
@@ -21,6 +26,10 @@ const UserDetail = ({ userId }) => {
 
   if (isLoading) {
     return <h2>Loading user details...</h2>;
+  }
+
+  if (isError) {
+    return <h2>Oops something went wrong...</h2>;
   }
 
   return (

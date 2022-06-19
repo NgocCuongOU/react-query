@@ -13,16 +13,16 @@ function Users({ setUserId }) {
   } = useQuery("users", getUsers, {
     retry: false,
     // Refetch data every second
-    refetchInterval: interval,
+    // refetchInterval: interval,
   });
 
   if (isLoading) {
     return <h1>Loading users...</h1>;
   }
 
-  if (isFetching) {
-    return <h1>isFetching...</h1>;
-  }
+  // if (isFetching) {
+  //   return <h1>isFetching...</h1>;
+  // }
 
   if (isError) {
     return <h1>Something went wrong... </h1>;

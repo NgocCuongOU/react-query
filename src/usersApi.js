@@ -6,7 +6,7 @@ const api = axios.create({
 
 export const getUsers = () => api.get("/users").then((res) => res.data);
 
-export const getUser = (id) => api.get(`/users/${id}`).then((res) => res.data);
+export const getUser = (id) => api.get(`/users/${id}s`).then((res) => res.data);
 
 export const updateUser = ({ id, ...updatedUser }) =>
   api
